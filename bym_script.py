@@ -3,7 +3,7 @@
 import requests
 import re
 
-sessionhash = '1dd089628e8d75e827d5371a6c161ba4'
+sessionhash = 'x'
 replace_text = "."
 
 # LOG IN
