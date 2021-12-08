@@ -24,7 +24,7 @@ headers = {
 
 params = (
     ('do', 'finduser'),
-    ('userid', '117007'),
+    ('userid', userid),
     ('contenttype', 'vBForum_Post'),
     ('showposts', '1'),
 )
