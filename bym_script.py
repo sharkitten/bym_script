@@ -6,8 +6,7 @@ import re
 pwd = "x"
 sessionhash = "x"
 userid = "x"
-securitytoken = 'x'
-replace_text = "."
+replace_text = ".a"
 
 # LOG IN
 
@@ -17,9 +16,10 @@ cookies = {
     "bymCommunity_lastactivity": "0", 
     "bymCommunity_lastvisit": "1638478923", 
     "bymCommunity_password": pwd,
-    "bymCommunity_sessionhash":sessionhash,
-    "bymCommunity_userid":userid
+    "bymCommunity_sessionhash": sessionhash,
+    "bymCommunity_userid": userid
 }
+
 
 params = (
     ('do', 'finduser'),
@@ -30,6 +30,7 @@ params = (
 
 response = requests.get('https://www.bym.de/forum/search.php', params=params, cookies=cookies)
 contents=str(response.content)
+securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
 
 
 # EXTRACT IDS
@@ -94,3 +95,4 @@ for ids in to_edit:
     response = requests.post('https://www.bym.de/forum/editpost.php', params=params, cookies=cookies, data=data)
     
 print("Done!")
+
