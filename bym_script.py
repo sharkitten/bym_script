@@ -3,8 +3,7 @@
 import requests
 import re
 
-sessionhash = 'x'
-userid = "x"
+sessionhash = '1dd089628e8d75e827d5371a6c161ba4'
 replace_text = "."
 
 # LOG IN
@@ -24,13 +23,17 @@ headers = {
 
 params = (
     ('do', 'finduser'),
-    ('userid', userid),
+    ('userid', '117007'),
     ('contenttype', 'vBForum_Post'),
     ('showposts', '1'),
 )
 
 response = requests.get('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies)
 contents=str(response.content)
+
+m = re.search("profil\/(\d+)", contents)
+userid = m.group(1)
+print(userid)
 securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
 
 # EXTRACT IDS
