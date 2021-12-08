@@ -3,35 +3,35 @@
 import requests
 import re
 
-pwd = "x"
-sessionhash = "x"
+sessionhash = 'x'
 userid = "x"
-replace_text = ".a"
+replace_text = "."
 
 # LOG IN
 
 import requests
 
 cookies = {
-    "bymCommunity_lastactivity": "0", 
-    "bymCommunity_lastvisit": "1638478923", 
-    "bymCommunity_password": pwd,
-    "bymCommunity_sessionhash": sessionhash,
-    "bymCommunity_userid": userid
+    'bymCommunity_sessionhash': sessionhash,
+    'bymCommunity_lastvisit': '1639005858',
+    'bymCommunity_lastactivity': '0',
+}
+
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0',
 }
 
 
 params = (
     ('do', 'finduser'),
-    ('userid', userid),
+    ('userid', '117007'),
     ('contenttype', 'vBForum_Post'),
     ('showposts', '1'),
 )
 
-response = requests.get('https://www.bym.de/forum/search.php', params=params, cookies=cookies)
+response = requests.get('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies)
 contents=str(response.content)
 securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
-
 
 # EXTRACT IDS
 
@@ -44,7 +44,7 @@ while (m is not None):
 	next = m.group(1)
 	next = next.replace("amp;", "")
 	url = "https://www.bym.de/forum/"+next
-	response = requests.get(url, cookies=cookies)
+	response = requests.get(url, cookies=cookies, headers=headers)
 	contents=str(response.content)
 	all_ids.extend(re.findall("#post(\d+)", contents))
 	m = re.search("rel=\"next\" href=\"([^\"]+)", contents)
@@ -68,7 +68,7 @@ for i in all_ids:
 		'reason': ''
 		}
 
-	response = requests.post('https://www.bym.de/forum/editpost.php', cookies=cookies, data=data)
+	response = requests.post('https://www.bym.de/forum/editpost.php', headers=headers, cookies=cookies, data=data)
 	if "Du hast keine Rechte" in response.text:
 		to_edit.append(i)
 		    
@@ -92,7 +92,6 @@ for ids in to_edit:
         }
 
 
-    response = requests.post('https://www.bym.de/forum/editpost.php', params=params, cookies=cookies, data=data)
+    response = requests.post('https://www.bym.de/forum/editpost.php', params=params, headers=headers, cookies=cookies, data=data)
     
 print("Done!")
-
