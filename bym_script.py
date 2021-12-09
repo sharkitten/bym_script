@@ -3,8 +3,8 @@ import hashlib
 import re
 
 username = 'username'
-password = 'password'
-replacetext = "...."
+password = 'passwort'
+replacetext = "."
 
 md5pwd = hashlib.md5(password.encode()).hexdigest()
 
@@ -40,18 +40,39 @@ response = requests.get('https://www.bym.de/forum', headers=headers, cookies=coo
 contents=str(response.content)
 m = re.search("profil\/(\d+)", contents)
 userid = m.group(1)
+securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
+
 
 params = (
-    ('do', 'finduser'),
-    ('userid', userid),
-    ('contenttype', 'vBForum_Post'),
-    ('showposts', '1'),
+    ('do', 'process'),
 )
 
-response = requests.get('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies)
-contents=str(response.content)
+data = [
+  ('query', ''),
+  ('titleonly', '0'),
+  ('searchuser', username),
+  ('starteronly', '0'),
+  ('exactname', '1'),
+  ('tag', ''),
+  ('childforums', '1'),
+  ('replyless', '0'),
+  ('replylimit', ''),
+  ('searchdate', '0'),
+  ('beforeafter', 'after'),
+  ('sortby', 'dateline'),
+  ('order', 'descending'),
+  ('showposts', '1'),
+  ('dosearch', 'Suchen'),
+  ('searchthreadid', ''),
+  ('s', ''),
+  ('securitytoken', securitytoken),
+  ('searchfromtype', 'vBForum:Post'),
+  ('do', 'process'),
+  ('contenttypeid', '1'),
+]
 
-securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
+response = requests.post('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies, data=data)
+contents=str(response.content)
 
 # EXTRACT IDS
 
