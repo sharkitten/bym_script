@@ -136,5 +136,6 @@ for ids in to_edit:
 
 
     response = requests.post('https://www.bym.de/forum/editpost.php', params=params, headers=headers, cookies=cookies, data=data)
-    
+    time.sleep(3)
+	
 print("Done!")
