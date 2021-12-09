@@ -1,6 +1,7 @@
 import requests
 import hashlib
 import re
+import time
 
 username = 'username'
 password = 'passwort'
@@ -112,6 +113,7 @@ for i in all_ids:
 	response = requests.post('https://www.bym.de/forum/editpost.php', headers=headers, cookies=cookies, data=data)
 	if "Du hast keine Rechte" in response.text:
 		to_edit.append(i)
+	time.sleep(3)
 		    
 
 ## EDIT THREADS
