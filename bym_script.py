@@ -20,10 +20,14 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0',
 }
 
+response = requests.get('https://www.bym.de/forum', headers=headers, cookies=cookies)
+contents=str(response.content)
+m = re.search("profil\/(\d+)", contents)
+userid = m.group(1)
 
 params = (
     ('do', 'finduser'),
-    ('userid', '117007'),
+    ('userid', userid),
     ('contenttype', 'vBForum_Post'),
     ('showposts', '1'),
 )
@@ -31,9 +35,7 @@ params = (
 response = requests.get('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies)
 contents=str(response.content)
 
-m = re.search("profil\/(\d+)", contents)
-userid = m.group(1)
-print(userid)
+
 securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
 
 # EXTRACT IDS
