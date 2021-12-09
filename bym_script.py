@@ -111,7 +111,7 @@ for i, val in enumerate(all_ids):
 
 	response = requests.post('https://www.bym.de/forum/editpost.php', headers=headers, cookies=cookies, data=data)
 	if "Du hast keine Rechte" in response.text:
-		to_edit.append(i)
+		to_edit.append(val)
 	if (i>0 and i%50==0):
 		print(str(i+1)+' Beiträge verarbeitet')
 		    
