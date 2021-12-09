@@ -1,5 +1,6 @@
 import requests
 import hashlib
+import time
 import re
 
 username = 'username'
@@ -114,6 +115,7 @@ for i, val in enumerate(all_ids):
 		to_edit.append(val)
 	if (i>0 and i%50==0):
 		print(str(i+1)+' Beiträge verarbeitet')
+	time.sleep(2)
 		    
 
 ## EDIT THREADS
@@ -136,5 +138,6 @@ for ids in to_edit:
 
 
     response = requests.post('https://www.bym.de/forum/editpost.php', params=params, headers=headers, cookies=cookies, data=data)
+    time.sleep(2)
     
 print("Done!")
