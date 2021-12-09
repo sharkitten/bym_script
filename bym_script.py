@@ -1,10 +1,9 @@
 import requests
 import hashlib
 import re
-import time
 
 username = 'username'
-password = 'passwort'
+password = 'password'
 replacetext = "."
 
 md5pwd = hashlib.md5(password.encode()).hexdigest()
@@ -99,13 +98,13 @@ print("Test:" + all_ids[0])
 
 to_edit = []
 
-for i in all_ids:
+for i, val in enumerate(all_ids):
 	
 	data = {
 		'do': 'deletepost',
 		's': '',
 		'securitytoken': securitytoken,
-		'postid': i,
+		'postid': val,
 		'deletepost': 'delete',
 		'reason': ''
 		}
@@ -113,7 +112,8 @@ for i in all_ids:
 	response = requests.post('https://www.bym.de/forum/editpost.php', headers=headers, cookies=cookies, data=data)
 	if "Du hast keine Rechte" in response.text:
 		to_edit.append(i)
-	time.sleep(3)
+	if (i>0 and i%50==0):
+		print(str(i+1)+' Beiträge verarbeitet')
 		    
 
 ## EDIT THREADS
@@ -136,6 +136,5 @@ for ids in to_edit:
 
 
     response = requests.post('https://www.bym.de/forum/editpost.php', params=params, headers=headers, cookies=cookies, data=data)
-    time.sleep(3)
-	
+    
 print("Done!")
