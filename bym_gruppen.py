@@ -96,11 +96,14 @@ while (m is not None):
 	m = re.search("rel=\"next\" href=\"([^\"]+)", contents)
 
 groupmap = getGroupIDs(set(all_posts[1::2]), cookies)
-all_posts = [(all_posts[x].split('#')[1],groupmap[all_posts[x+1]]) for x in range(0,len(all_posts),2)]
+all_posts = [(all_posts[x].split('#')[1][8:],groupmap[all_posts[x+1]]) for x in range(0,len(all_posts),2)]
+print(all_posts)
 
 print("There are {} posts to delete.".format(len(all_posts)))
 
 # NUKE POSTS!
+
+to_edit = []
 
 for i in all_posts:
 
