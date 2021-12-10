@@ -102,8 +102,6 @@ print("There are {} posts to delete.".format(len(all_posts)))
 
 # NUKE POSTS!
 
-to_edit = []
-
 for i in all_posts:
 
 	data = {
