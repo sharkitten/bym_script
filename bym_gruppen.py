@@ -117,4 +117,4 @@ for i in all_ids:
 	'page': '0'
 }
 
-response = requests.post('https://www.bym.de/forum/group.php', headers=headers, cookies=cookies, data=data)
+	response = requests.post('https://www.bym.de/forum/group.php', headers=headers, cookies=cookies, data=data)
