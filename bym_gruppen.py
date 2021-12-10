@@ -104,7 +104,7 @@ print("There are {} posts to delete.".format(len(all_posts)))
 
 to_edit = []
 
-for i in all_ids:
+for i in all_posts:
 
 	data = {
 	'deletemessage': 'soft',
