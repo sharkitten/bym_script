@@ -112,7 +112,7 @@ for i in range(len(all_posts)):
 	'securitytoken': securitytoken,
 	'gmid': all_posts[i][0],
 	'do': 'deletemessage',
-	'groupid': all_posts[I][1],
+	'groupid': all_posts[i][1],
 	'page': '0'
 }
 
