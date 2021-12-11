@@ -1,10 +1,10 @@
 import requests
 import hashlib
-import time
+import random
 import re
 
-username = 'username'
-password = 'password'
+username = 'moth'
+password = 'K2WkUNXC'
 replacetext = "."
 
 md5pwd = hashlib.md5(password.encode()).hexdigest()
@@ -38,10 +38,9 @@ session_cookies = response.cookies
 cookies = session_cookies.get_dict()
 
 response = requests.get('https://www.bym.de/forum', headers=headers, cookies=cookies)
-contents=str(response.content)
-m = re.search("profil\/(\d+)", contents)
-userid = m.group(1)
-securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
+
+userid = re.search("profil\/(\d+)", response.text).group(1)
+securitytoken = response.text.split('SECURITYTOKEN = "')[1].split('"')[0]
 
 
 params = (
@@ -73,26 +72,23 @@ data = [
 ]
 
 response = requests.post('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies, data=data)
-contents=str(response.content)
 
 # EXTRACT IDS
 
 all_ids = []
-all_ids.extend(re.findall("#post(\d+)", contents))
-m = re.search("rel=\"next\" href=\"([^\"]+)", contents)
+all_ids.extend(re.findall("#post(\d+)", response.text))
+m = re.search("rel=\"next\" href=\"([^\"]+)", response.text)
 
 
 while (m is not None):
-	next = m.group(1)
-	next = next.replace("amp;", "")
-	url = "https://www.bym.de/forum/"+next
-	response = requests.get(url, cookies=cookies, headers=headers)
-	contents=str(response.content)
-	all_ids.extend(re.findall("#post(\d+)", contents))
-	m = re.search("rel=\"next\" href=\"([^\"]+)", contents)
+	next = m.group(1).replace("amp;", "")
+	response = requests.get('https://www.bym.de/forum/'+next, cookies=cookies, headers=headers)
+	all_ids.extend(re.findall("#post(\d+)", response.text))
+	m = re.search("rel=\"next\" href=\"([^\"]+)", response.text)
 
 print("There are {} posts to delete.".format(len(all_ids)))
-print("Test:" + all_ids[0])
+
+random.shuffle(all_ids)
 
 
 # NUKE POSTS!
@@ -113,9 +109,9 @@ for i, val in enumerate(all_ids):
 	response = requests.post('https://www.bym.de/forum/editpost.php', headers=headers, cookies=cookies, data=data)
 	if "Du hast keine Rechte" in response.text:
 		to_edit.append(val)
+		print(str(val)+' kann nicht gelöscht werden')
 	if (i>0 and i%50==0):
 		print(str(i+1)+' Beiträge verarbeitet')
-	time.sleep(2)
 		    
 
 ## EDIT THREADS
@@ -138,6 +134,5 @@ for ids in to_edit:
 
 
     response = requests.post('https://www.bym.de/forum/editpost.php', params=params, headers=headers, cookies=cookies, data=data)
-    time.sleep(2)
     
 print("Done!")
