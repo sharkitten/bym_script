@@ -3,8 +3,8 @@ import hashlib
 import random
 import re
 
-username = 'moth'
-password = 'K2WkUNXC'
+username = 'username'
+password = 'password'
 replacetext = "."
 
 md5pwd = hashlib.md5(password.encode()).hexdigest()
