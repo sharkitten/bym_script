@@ -104,7 +104,6 @@ print("There are {} posts to delete.".format(len(all_posts)))
 # NUKE POSTS!
 
 for i in range(len(all_posts)):
-	print(all_posts[i])
 	data = {
 	'deletemessage': 'soft',
 	'reason': '',
