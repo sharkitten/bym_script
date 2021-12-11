@@ -47,7 +47,7 @@ session_cookies = response.cookies
 cookies = session_cookies.get_dict()
 
 response = requests.get('https://www.bym.de/forum', headers=headers, cookies=cookies)
-contents=str(response.content)
+contents = str(response.content)
 m = re.search("profil\/(\d+)", contents)
 userid = m.group(1)
 securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
@@ -78,7 +78,7 @@ data = {
 }
 
 response = requests.post('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies, data=data)
-contents=str(response.content)
+contents = str(response.content)
 
 # EXTRACT IDS
 
