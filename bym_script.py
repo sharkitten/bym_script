@@ -34,8 +34,7 @@ data = {
 
 response = requests.post('https://www.bym.de/forum/login.php', headers=headers, params=params, data=data)
 
-session_cookies = response.cookies
-cookies = session_cookies.get_dict()
+cookies = response.cookies.get_dict()
 
 response = requests.get('https://www.bym.de/forum', headers=headers, cookies=cookies)
 
