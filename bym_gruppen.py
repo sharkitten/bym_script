@@ -7,7 +7,7 @@ def getGroupIDs(groups, cookies):
 	groupmap = {}
 	for g in groups:
 		response = requests.get('https://www.bym.de/forum/'+g, cookies=cookies)
-		contents=str(response.content)
+		contents = str(response.content)
 		m = re.search("groupid=(\d+)", contents)
 		groupmap[g] = m.group(1)
 	return groupmap
@@ -91,7 +91,7 @@ while (m is not None):
 	next = next.replace("amp;", "")
 	url = "https://www.bym.de/forum/"+next
 	response = requests.get(url, cookies=cookies, headers=headers)
-	contents=str(response.content)
+	contents = str(response.content)
 	all_posts.extend(re.findall("a href=\"(gruppen\/[^\"]+)", contents))
 	m = re.search("rel=\"next\" href=\"([^\"]+)", contents)
 
