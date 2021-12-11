@@ -1,7 +1,7 @@
 import requests
 import hashlib
+import random
 import re
-
 
 def getGroupIDs(groups, cookies):
 	groupmap = {}
@@ -97,6 +97,7 @@ while (m is not None):
 
 groupmap = getGroupIDs(set(all_posts[1::2]), cookies)
 all_posts = [(all_posts[x].split('#')[1][8:],groupmap[all_posts[x+1]]) for x in range(0,len(all_posts),2)]
+random.shuffle(all_posts)
 
 print("There are {} posts to delete.".format(len(all_posts)))
 
@@ -104,17 +105,19 @@ print("There are {} posts to delete.".format(len(all_posts)))
 
 to_edit = []
 
-for i in all_posts:
-
+for i in range(len(all_posts)):
+	print(all_posts[i])
 	data = {
 	'deletemessage': 'soft',
 	'reason': '',
 	's': '',
 	'securitytoken': securitytoken,
-	'gmid': i[0],
+	'gmid': all_posts[i][0],
 	'do': 'deletemessage',
-	'groupid': i[1],
+	'groupid': all_posts[I][1],
 	'page': '0'
 }
 
 	response = requests.post('https://www.bym.de/forum/group.php', headers=headers, cookies=cookies, data=data)
+	if (i>0 and i%50==0):
+		print(str(i+1)+' Beiträge verarbeitet')
