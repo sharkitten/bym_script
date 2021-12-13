@@ -3,11 +3,12 @@ import hashlib
 import random
 import re
 
+
 def getGroupIDs(groups, cookies):
 	groupmap = {}
 	for g in groups:
 		response = requests.get('https://www.bym.de/forum/'+g, cookies=cookies)
-		contents = str(response.content)
+		contents=str(response.content)
 		m = re.search("groupid=(\d+)", contents)
 		groupmap[g] = m.group(1)
 	return groupmap
@@ -47,10 +48,9 @@ session_cookies = response.cookies
 cookies = session_cookies.get_dict()
 
 response = requests.get('https://www.bym.de/forum', headers=headers, cookies=cookies)
-contents = str(response.content)
-m = re.search("profil\/(\d+)", contents)
+m = re.search("profil\/(\d+)", response.text)
 userid = m.group(1)
-securitytoken = contents.split('SECURITYTOKEN = "')[1].split('"')[0]
+securitytoken = response.text.split('SECURITYTOKEN = "')[1].split('"')[0]
 
 
 params = (
@@ -78,7 +78,7 @@ data = {
 }
 
 response = requests.post('https://www.bym.de/forum/search.php', headers=headers, params=params, cookies=cookies, data=data)
-contents = str(response.content)
+contents=str(response.text)
 
 # EXTRACT IDS
 
@@ -91,11 +91,12 @@ while (m is not None):
 	next = next.replace("amp;", "")
 	url = "https://www.bym.de/forum/"+next
 	response = requests.get(url, cookies=cookies, headers=headers)
-	contents = str(response.content)
+	contents=str(response.content)
 	all_posts.extend(re.findall("a href=\"(gruppen\/[^\"]+)", contents))
 	m = re.search("rel=\"next\" href=\"([^\"]+)", contents)
 
 groupmap = getGroupIDs(set(all_posts[1::2]), cookies)
+print(groupmap)
 all_posts = [(all_posts[x].split('#')[1][8:],groupmap[all_posts[x+1]]) for x in range(0,len(all_posts),2)]
 random.shuffle(all_posts)
 
@@ -103,7 +104,10 @@ print("There are {} posts to delete.".format(len(all_posts)))
 
 # NUKE POSTS!
 
+to_edit = []
+
 for i in range(len(all_posts)):
+	print(all_posts[i])
 	data = {
 	'deletemessage': 'soft',
 	'reason': '',
@@ -116,5 +120,6 @@ for i in range(len(all_posts)):
 }
 
 	response = requests.post('https://www.bym.de/forum/group.php', headers=headers, cookies=cookies, data=data)
+	print("Beitrag {} in Gruppe {} wurde gelöscht (hoffentlich).".format(all_posts[i][0], all_posts[i][1]))
 	if (i>0 and i%50==0):
 		print(str(i+1)+' Beiträge verarbeitet')
