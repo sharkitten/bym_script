@@ -1,6 +1,7 @@
 import requests
 import hashlib
 import random
+import time
 import re
 
 username = 'username'
@@ -84,6 +85,7 @@ while (m is not None):
 	response = requests.get('https://www.bym.de/forum/'+next, cookies=cookies, headers=headers)
 	all_ids.extend(re.findall("#post(\d+)", response.text))
 	m = re.search("rel=\"next\" href=\"([^\"]+)", response.text)
+	time.sleep(3)
 
 print("There are {} posts to delete.".format(len(all_ids)))
 
@@ -106,6 +108,7 @@ for i, val in enumerate(all_ids):
 		}
 
 	response = requests.post('https://www.bym.de/forum/editpost.php', headers=headers, cookies=cookies, data=data)
+	time.sleep(3)
 	if "Du hast keine Rechte" in response.text:
 		to_edit.append(val)
 		print(str(val)+' kann nicht gelöscht werden')
@@ -133,5 +136,6 @@ for ids in to_edit:
 
 
     response = requests.post('https://www.bym.de/forum/editpost.php', params=params, headers=headers, cookies=cookies, data=data)
+    time.sleep(3)
     
 print("Done!")
