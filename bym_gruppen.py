@@ -1,6 +1,7 @@
 import requests
 import hashlib
 import random
+import time
 import re
 
 
@@ -94,6 +95,7 @@ while (m is not None):
 	contents=str(response.content)
 	all_posts.extend(re.findall("a href=\"(gruppen\/[^\"]+)", contents))
 	m = re.search("rel=\"next\" href=\"([^\"]+)", contents)
+	time.sleep(3)
 
 groupmap = getGroupIDs(set(all_posts[1::2]), cookies)
 print(groupmap)
@@ -121,5 +123,6 @@ for i in range(len(all_posts)):
 
 	response = requests.post('https://www.bym.de/forum/group.php', headers=headers, cookies=cookies, data=data)
 	print("Beitrag {} in Gruppe {} wurde gelöscht (hoffentlich).".format(all_posts[i][0], all_posts[i][1]))
+	time.sleep(3)
 	if (i>0 and i%50==0):
 		print(str(i+1)+' Beiträge verarbeitet')
